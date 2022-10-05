@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -60,20 +61,21 @@ namespace PrimeNumbers
             {
                 return;
             }
-            var first = (long)Convert.ToDouble(firstNumber.Text);
-            var second = (long)Convert.ToDouble(secondNumber.Text);
+            var first = Convert.ToInt32(firstNumber.Text);
+            var second = Convert.ToInt32(secondNumber.Text);
 
             if (first > second)
             {
                 return;
             }
 
-            List<long> primeNumbersList = calculations.PrimeNumbersSequential(first, second);
+            List<int> primeNumbersList = calculations.PrimeNumbersSequential(first, second);
             listBoxPrimeNumbers.DataSource = primeNumbersList;
         }
 
-        private void CalculatePrimeNumbers_Click(object sender, EventArgs e)
+        private void CalculatePrimeNumbers_ClickAsync(object sender, EventArgs e)
         {
+            List<int> primeNumbersList = new List<int>();
             if (String.IsNullOrEmpty(firstNumber.Text))
             {
                 return;
@@ -83,16 +85,24 @@ namespace PrimeNumbers
             {
                 return;
             }
-            var first = (long)Convert.ToDouble(firstNumber.Text);
-            var second = (long)Convert.ToDouble(secondNumber.Text);
+            var first = Convert.ToInt32(firstNumber.Text);
+            var second = Convert.ToInt32(secondNumber.Text);
 
             if (first>second)
             {
                 return;
             }
+            
+            startTask(first, second);
+            
+        }
 
-            List<long> primeNumbersList = calculations.PrimeNumbersAsync(first, second);
-            listBoxPrimeNumbers.DataSource = primeNumbersList;
+        private async void startTask(int first, int second)
+        {
+            List<int> p = new List<int>();
+            p.Add(1);
+            var primeNumberList = await Task.Run(() => calculations.PrimeNumbersSequential(first, second));
+            listBoxPNAsync.DataSource = p;
         }
     }
 }

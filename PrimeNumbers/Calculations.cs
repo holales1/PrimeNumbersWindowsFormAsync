@@ -12,10 +12,10 @@ namespace PrimeNumbers
 
         private static readonly object locker = new Object();
 
-        public List<long> PrimeNumbersSequential(long start, long end)
+        public List<int> PrimeNumbersSequential(int start, int end)
         {
-            List<long> primeNumbersList = new List<long>();
-            for (long i = start; i <= end; i++)
+            List<int> primeNumbersList = new List<int>();
+            for (int i = start; i <= end; i++)
             {
                 if (IsPrime(i))
                 {
