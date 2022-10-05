@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace PrimeNumbers
         {
             InitializeComponent();
             calculations = new Calculations();
+            label1.Text = "00:00";
+            label2.Text = "00:00";
         }
 
         private void firstNumber_KeyPress(object sender, KeyPressEventArgs e)
@@ -68,8 +71,11 @@ namespace PrimeNumbers
             {
                 return;
             }
-
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             List<int> primeNumbersList = calculations.PrimeNumbersSequential(first, second);
+            stopWatch.Stop();
+            label1.Text = stopWatch.Elapsed.TotalSeconds.ToString();
             listBoxPrimeNumbers.DataSource = primeNumbersList;
         }
 
@@ -94,15 +100,23 @@ namespace PrimeNumbers
             }
             
             startTask(first, second);
-            
         }
 
         private async void startTask(int first, int second)
         {
-            List<int> p = new List<int>();
+            //Code to see that it is ASYNC. The problem is that when it prints all the numbers it freezes !!!!!
+            /*List<int> p = new List<int>();
             p.Add(1);
-            var primeNumberList = await Task.Run(() => calculations.PrimeNumbersSequential(first, second));
-            listBoxPNAsync.DataSource = p;
+            var primeNumberList = await Task.Run(() => calculations.PrimeNumbersAsync(first, second));
+            listBoxPNAsync.DataSource = p;*/
+
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var primeNumberList = await Task.Run(() => calculations.PrimeNumbersAsync(first, second));
+            stopWatch.Stop();
+            label2.Text = stopWatch.Elapsed.TotalSeconds.ToString();
+            listBoxPNAsync.DataSource = primeNumberList;
+            
         }
     }
 }
